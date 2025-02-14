@@ -3,12 +3,17 @@ const multer = require('multer');
 const path = require('path');
 const app = express();
 
+// Serve static files from the 'public' directory
+app.use(express.static('public'));
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/');
+    cb(null, 'public/uploads/'); // Change the destination to 'public/uploads/'
   },
   filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
+    const counter = require('./counter.js');
+    const filename = counter.getNextFilename() + path.extname(file.originalname);
+    cb(null, filename);
   }
 });
 
