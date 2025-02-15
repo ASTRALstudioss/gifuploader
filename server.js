@@ -57,10 +57,14 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 }); 
 
+app.get('/files', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'uploads.html'));
+}); 
+
 app.set('view engine', 'ejs');
 
 app.get('/api/files', (req, res) => {
-  const imageFiles = fs.readdirSync('public/uploads/');
+  const imageFiles = fs.readdirSync('/uploads');
   res.json(imageFiles);
 });
 
