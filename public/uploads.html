@@ -15,13 +15,13 @@
       object-fit: cover;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <h1>Uploads</h1>
-  <div class="container" id="file-container"></div>
+  <div class="container" id="file-container">
+  </div>
 
   <script>
     const fileContainer = document.getElementById('file-container');
@@ -34,9 +34,6 @@
           img.src = `/uploads/${file}`;
           img.alt = file;
           img.className = 'file';
-          img.addEventListener('click', () => {
-            window.location.href = `/uploads/${file}`;
-          });
           fileContainer.appendChild(img);
         });
       });
