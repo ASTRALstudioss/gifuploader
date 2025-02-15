@@ -6,7 +6,7 @@ const fs = require('fs');
 const ejs = require('ejs');
 
 function routeHandler(req, res) {
-  const imageFiles = fs.readdirSync('public/uploads/');
+  const imageFiles = fs.readdirSync('/uploads/');
   res.json(imageFiles);
 }
 
@@ -17,7 +17,7 @@ app.use(express.static('public'));
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'public/uploads/'); // Change the destination to 'public/uploads/'
+    cb(null, '/uploads/'); // Change the destination to 'public/uploads/'
   },
   filename: function (req, file, cb) {
     const counter = require('./counter.js');
