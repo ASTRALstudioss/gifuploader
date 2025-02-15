@@ -4,12 +4,11 @@ const path = require('path');
 const app = express();
 const fs = require('fs');
 
-// Serve static files from the 'public' directory
 app.use(express.static('public'));
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'public/uploads/'); // Change the destination to 'public/uploads/'
+    cb(null, 'uploads/');
   },
   filename: function (req, file, cb) {
     const counter = require('./counter.js');
@@ -17,8 +16,6 @@ const storage = multer.diskStorage({
     cb(null, filename);
   }
 });
-
-app.use(express.static('public'));
 
 const fileFilter = (req, file, cb) => {
   if (file.mimetype === 'image/png' || file.mimetype === 'image/gif') {
@@ -54,7 +51,7 @@ app.get('/uploads', (req, res) => {
 }); 
 
 app.get('/api/files', (req, res) => {
-  const files = fs.readdirSync('/uploads/');
+  const files = fs.readdirSync('uploads/');
   res.json(files);
 });
 
