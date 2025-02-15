@@ -1,14 +1,23 @@
-const express = require('express');
 const multer = require('multer');
 const path = require('path');
+const express = require('express');
 const app = express();
 const fs = require('fs');
+const ejs = require('ejs');
 
+function routeHandler(req, res) {
+  const imageFiles = fs.readdirSync('public/uploads/');
+  res.json(imageFiles);
+}
+
+app.get('/uploads', routeHandler);
+
+// Serve static files from the 'public' directory
 app.use(express.static('public'));
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/');
+    cb(null, 'public/uploads/'); // Change the destination to 'public/uploads/'
   },
   filename: function (req, file, cb) {
     const counter = require('./counter.js');
@@ -16,6 +25,8 @@ const storage = multer.diskStorage({
     cb(null, filename);
   }
 });
+
+app.use(express.static('public'));
 
 const fileFilter = (req, file, cb) => {
   if (file.mimetype === 'image/png' || file.mimetype === 'image/gif') {
@@ -46,13 +57,11 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 }); 
 
-app.get('/uploads', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'uploads.html'));
-}); 
+app.set('view engine', 'ejs');
 
 app.get('/api/files', (req, res) => {
-  const files = fs.readdirSync('uploads/');
-  res.json(files);
+  const imageFiles = fs.readdirSync('public/uploads/');
+  res.json(imageFiles);
 });
 
 app.listen(3000, () => {

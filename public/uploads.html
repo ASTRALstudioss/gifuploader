@@ -15,26 +15,26 @@
       object-fit: cover;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <h1>Uploads</h1>
-  <div class="container" id="file-container">
-  </div>
+  <div class="container" id="image-container"></div>
 
   <script>
-    const fileContainer = document.getElementById('file-container');
+    const imageContainer = document.getElementById('image-container');
 
-    fetch('/api/files')
+    fetch('/uploads')
       .then(response => response.json())
-      .then(files => {
-        files.forEach(file => {
+      .then(imageFiles => {
+        imageFiles.forEach(file => {
           const img = document.createElement('img');
           img.src = `/uploads/${file}`;
           img.alt = file;
           img.className = 'file';
-          fileContainer.appendChild(img);
+          imageContainer.appendChild(img);
         });
       });
   </script>
