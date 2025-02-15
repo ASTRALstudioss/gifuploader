@@ -54,7 +54,7 @@ app.get('/uploads', (req, res) => {
 }); 
 
 app.get('/api/files', (req, res) => {
-  const files = fs.readdirSync('public/uploads/');
+  const files = fs.readdirSync('/uploads/');
   res.json(files);
 });
 
