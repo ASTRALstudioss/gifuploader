@@ -1,9 +1,10 @@
 
 <h1>Upload Your PNG and GIF Files</h1>
 <input type="file" id="fileInput" accept=".png, .gif">
-<input type="text" id="customFilename" placeholder="Enter custom filename (optional)">
 <button onclick="uploadFile()">Upload</button>
 <div id="status"></div>
+<a href="/files/"><button class="view-all-files-btn">View All Files</button></a>
+
 
 <style>
   body {
@@ -44,6 +45,23 @@
     margin-top: 20px;
     font-size: 14px;
   }
+
+  .view-all-files-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #c6c6c6;
+  color: #c6c6c6;
+  padding: 10px 20px;
+  border: 1px solid #333;
+  border-radius: 10px;
+  cursor: pointer;
+  -webkit-text-fill-color: #333;
+}
+
+.view-all-files-btn:hover {
+  background-color: #ffffff;
+}
 </style>
 
 <script>

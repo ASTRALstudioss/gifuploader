@@ -6,7 +6,7 @@ const fs = require('fs');
 const ejs = require('ejs');
 
 function routeHandler(req, res) {
-  const imageFiles = fs.readdirSync('/uploads/');
+  const imageFiles = fs.readdirSync('public/uploads/');
   res.json(imageFiles);
 }
 
@@ -17,7 +17,7 @@ app.use(express.static('public'));
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, '/uploads/'); // Change the destination to 'public/uploads/'
+    cb(null, 'public/uploads/'); // Change the destination to 'public/uploads/'
   },
   filename: function (req, file, cb) {
     const counter = require('./counter.js');
@@ -36,20 +36,32 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-const upload = multer({ storage: storage, fileFilter: fileFilter }).single('image');
 const sharp = require('sharp');
 
-app.post('/upload', (req, res) => {
-  upload(req, res, (err) => {
-    if (err) {
-      res.status(400).send(err); 
+const upload = multer({ dest: 'public/uploads/' });
+const crypto = require('crypto');
+
+
+
+app.post('/upload', upload.single('image'), (req, res) => {
+  const file = req.file;
+  const randomFilename = Math.floor(Math.random() * 1999999999999999).toString()
+  const extension = path.extname(file.originalname);
+  const filename = `${randomFilename}${extension}`;
+
+  while (true) {
+    const filePath = path.join(__dirname, 'public', 'uploads', filename);
+    if (!fs.existsSync(filePath)) {
+      fs.renameSync(file.path, filePath);
+      res.send(`Done! Filepath: /uploads/${filename}`);
+            break;
     } else {
-      const uploadedFile = req.file;
-      const filename = uploadedFile.filename;
-      const filePath = path.join('/uploads/', filename);
-      res.send(`File uploaded successfully! <br> File path: ${filePath}`);
+      const extension = path.extname(originalFilename);
+      const basename = path.basename(originalFilename, extension);
+      filename = `${basename} (${counter})${extension}`;
+      counter++;
     }
-  });
+  }
 });
 
 
@@ -58,7 +70,7 @@ app.get('/', (req, res) => {
 }); 
 
 app.get('/files', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'uploads.html'));
+    res.sendFile(path.join(__dirname, 'public', 'uploads.html'));
 }); 
 
 app.set('view engine', 'ejs');
